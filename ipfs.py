@@ -10,15 +10,15 @@ def pin_to_ipfs(data):
     # Define the endpoint for pinning to IPFS
     ipfs_url = 'https://ipfs.infura.io:5001/api/v0/add'
 
-    <project_id> = '8e029658709540f6bc1fb9b8f0a270c8'
-    <project_secret> = '3V+HceQMSpSdLgVgLVIvc9TLb/hzrjDihlqA8XtpJOvrU4KGtmBdcw'
+    project_id = '8e029658709540f6bc1fb9b8f0a270c8'
+    project_secret = '3V+HceQMSpSdLgVgLVIvc9TLb/hzrjDihlqA8XtpJOvrU4KGtmBdcw'
 
     files = {
     'file': data
     }
 
     # Send a POST request with the JSON data
-    response = requests.post('https://ipfs.infura.io:5001/api/v0/add', files=files, auth=(<project_id>,<project_secret>))
+    response = requests.post('https://ipfs.infura.io:5001/api/v0/add', files=files, auth=(project_id,project_secret))
     print(response.text)
 
     response.raise_for_status()  # This will raise an error for a failed request
