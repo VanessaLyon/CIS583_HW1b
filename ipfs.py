@@ -7,49 +7,37 @@ def pin_to_ipfs(data):
 
     # Convert the dictionary to a JSON string
     json_data = json.dumps(data)
-    my_file = json_data + '.json'
 
-    # Convert JSON string to a bytes stream
-    json_bytes = io.BytesIO(json_data.encode())
+    # Define the endpoint for pinning to IPFS via Pinata
+    pinata_endpoint = 'https://api.pinata.cloud/pinning/pinJSONToIPFS'
 
-    # Define the endpoint for pinning to IPFS
-    ipfs_url = 'https://ipfs.infura.io:5001/api/v0/add'
-
-    project_id = '8e029658709540f6bc1fb9b8f0a270c8'
-    project_secret = '3V+HceQMSpSdLgVgLVIvc9TLb/hzrjDihlqA8XtpJOvrU4KGtmBdcw'
-
-    files = {
-        'file': (my_file, json_bytes)  # Use a tuple (filename, fileobj)
+    pinata_api_key = 'f865ea47c1a5d6bb5be4'
+    pinata_secret_api_key = '0249fa18398161acfedba66eb9c547b88c2206713ca128c8630af170cb909770'
+    
+    headers = {
+        'pinata_api_key': pinata_api_key,
+        'pinata_secret_api_key': pinata_secret_api_key
     }
 
     # Send a POST request with the JSON data
-    response = requests.post(ipfs_url, files=files, auth=(project_id,project_secret))
-    print(response.text)
-    response.raise_for_status()  # This will raise an error for a failed request
+    response = requests.post(pinata_endpoint, headers=headers, json={"pinataContent": data})
+    response.raise_for_status()  # Raise an error for a failed request
 
     # Extract the CID from the response
-    cid = response.json()["Hash"]
+    cid = response.json()["IpfsHash"]
     print(cid)
 
     return cid
 
 
-def get_from_ipfs(cid, content_type="json"):
+def get_from_ipfs(cid):
     assert isinstance(cid, str), "get_from_ipfs accepts a cid in the form of a string"
 
-    params = (
-        ('arg',cid),
-    )
+    # Define the endpoint for retrieving from IPFS via a public gateway
+    ipfs_gateway_url = f'https://gateway.pinata.cloud/ipfs/{cid}'
 
-    # Define the endpoint for pinning to IPFS
-    ipfs_url = 'https://ipfs.infura.io:5001/api/v0/cat'
-    
-    project_id = '8e029658709540f6bc1fb9b8f0a270c8'
-    project_secret = '3V+HceQMSpSdLgVgLVIvc9TLb/hzrjDihlqA8XtpJOvrU4KGtmBdcw'
-
-    response = requests.post(ipfs_url, params=params, auth=(project_id,project_secret))
-    print(response)
-
+    # Send a GET request
+    response = requests.get(ipfs_gateway_url)
     response.raise_for_status()
 
     # Assuming the content is JSON, parse it into a Python dictionary
