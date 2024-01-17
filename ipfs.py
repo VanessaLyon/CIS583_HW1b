@@ -15,7 +15,7 @@ def pin_to_ipfs(data):
     ipfs_url = 'https://ipfs.infura.io:5001/api/v0/add'
 
     files = {
-        'file': ('data.json', json_bytes)  # Use a tuple (filename, fileobj)
+        'file': (data +'.json', json_bytes)  # Use a tuple (filename, fileobj)
     }
 
     # Send a POST request with the JSON data
