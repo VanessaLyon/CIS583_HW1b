@@ -14,21 +14,19 @@ def pin_to_ipfs(data):
     # Define the endpoint for pinning to IPFS
     ipfs_url = 'https://ipfs.infura.io:5001/api/v0/add'
 
-    project_id = '8e029658709540f6bc1fb9b8f0a270c8'
-    project_secret = '3V+HceQMSpSdLgVgLVIvc9TLb/hzrjDihlqA8XtpJOvrU4KGtmBdcw'
-
     files = {
         'file': ('data.json', json_bytes)  # Use a tuple (filename, fileobj)
     }
 
     # Send a POST request with the JSON data
-    response = requests.post(ipfs_url, files=files, auth=(project_id, project_secret))
+    response = requests.post(ipfs_url, files=files)
     response.raise_for_status()  # This will raise an error for a failed request
 
     # Extract the CID from the response
     cid = response.json()["Hash"]
 
     return cid
+
 
 def get_from_ipfs(cid, content_type="json"):
     assert isinstance(cid, str), "get_from_ipfs accepts a cid in the form of a string"
