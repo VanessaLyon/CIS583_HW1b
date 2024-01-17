@@ -23,7 +23,7 @@ def pin_to_ipfs(data):
     }
 
     # Send a POST request with the JSON data
-    response = requests.post(ipfs_url, files=files, , auth=(project_id,project_secret))
+    response = requests.post(ipfs_url, files=files, auth=(project_id,project_secret))
     print(response.text)
     response.raise_for_status()  # This will raise an error for a failed request
 
