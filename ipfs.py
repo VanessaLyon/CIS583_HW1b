@@ -41,10 +41,13 @@ def get_from_ipfs(cid, content_type="json"):
         ('arg',cid),
     )
 
+    # Define the endpoint for pinning to IPFS
+    ipfs_url = 'https://ipfs.infura.io:5001/api/v0/cat'
+    
     project_id = '8e029658709540f6bc1fb9b8f0a270c8'
     project_secret = '3V+HceQMSpSdLgVgLVIvc9TLb/hzrjDihlqA8XtpJOvrU4KGtmBdcw'
 
-    response = requests.post('https://ipfs.infura.io:5001/api/v0/cat', params=params, auth=(project_id,project_secret))
+    response = requests.post(ipfs_url, params=params, auth=(project_id,project_secret))
     print(response)
 
     response.raise_for_status()
