@@ -10,19 +10,21 @@ def pin_to_ipfs(data):
     # Define the endpoint for pinning to IPFS
     ipfs_url = 'https://ipfs.infura.io:5001/api/v0/add'
 
-    infura_project_id = '8e029658709540f6bc1fb9b8f0a270c8'
-    infura_project_secret = '3V+HceQMSpSdLgVgLVIvc9TLb/hzrjDihlqA8XtpJOvrU4KGtmBdcw'
-    # Headers for basic authentication
-    headers = {
-        'Authorization': 'Basic ' + base64.b64encode(f"{infura_project_id}:{infura_project_secret}".encode()).decode()
+    <project_id> = '8e029658709540f6bc1fb9b8f0a270c8'
+    <project_secret> = '3V+HceQMSpSdLgVgLVIvc9TLb/hzrjDihlqA8XtpJOvrU4KGtmBdcw'
+
+    files = {
+    'file': data
     }
 
     # Send a POST request with the JSON data
-    response = requests.post(ipfs_url, headers=headers, files={"file": json_data})
+    response = requests.post('https://ipfs.infura.io:5001/api/v0/add', files=files, auth=(<project_id>,<project_secret>))
+    print(response.text)
+
     response.raise_for_status()  # This will raise an error for a failed request
 
     # Extract the CID from the response
-    cid = response.json()["Hash"]
+    cid = response.text
 
     return cid
 
@@ -30,7 +32,7 @@ def get_from_ipfs(cid, content_type="json"):
     assert isinstance(cid, str), "get_from_ipfs accepts a cid in the form of a string"
 
     # Define the endpoint for retrieving from IPFS
-    ipfs_gateway_url = f'https://ipfs.infura.io/ipfs/{cid}'
+    ipfs_gateway_url = f'https://ipfs.infura.io/ipfs/cat?arg={cid}'
 
     # Send a GET request
     response = requests.get(ipfs_gateway_url)
